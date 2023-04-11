@@ -16,7 +16,6 @@ function openWindow() {
     );
 
     let timer = setInterval(() => {
-        console.log("check")
         if (windowRef.value.closed) {
             router.push("/")
             clearInterval(timer)
