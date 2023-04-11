@@ -4,9 +4,9 @@ using NetCore.Lti.Extensions;
 
 namespace NetCore.Lti;
 
-public class LtiMessage : JwtSecurityToken
+public class LtiRequest : JwtSecurityToken
 {
-    public LtiMessage(string idToken) : base(idToken)
+    public LtiRequest(string idToken) : base(idToken)
     {
     }
 
