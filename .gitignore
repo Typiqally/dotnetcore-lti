@@ -811,3 +811,7 @@ test/
 
 jwks.*
 configuration.json
+
+appsettings.json
+appsettings.*.json
+!appsettings.example.json
