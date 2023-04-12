@@ -1,6 +1,8 @@
 using IdentityModel.Jwk;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using NetCore.Lti;
 using NetCore.Lti.EntityFrameworkCore;
 using NetCore.Lti.Samples.Spa;
@@ -67,8 +69,22 @@ builder.Services.AddAuthentication(static options => { options.DefaultScheme = C
         options.SaveTokens = true;
     });
 
+builder.Services.AddScoped<TokenClient>(static provider =>
+{
+    var httpClient = provider.GetRequiredService<IHttpClientFactory>().CreateClient();
+    var options = provider.GetRequiredService<IOptionsSnapshot<OAuthOptions>>().Get(Constants.CanvasDockerName);
+
+    return new TokenClient(httpClient, new TokenClientOptions
+    {
+        Address = options.TokenEndpoint,
+        ClientId = options.ClientId,
+        ClientSecret = options.ClientSecret,
+    });
+});
+
 builder.Services.AddHttpClient(Constants.CanvasDockerName, static (_, client) => { client.BaseAddress = new Uri("http://canvas.docker/"); });
-builder.Services.AddHttpClient<ICanvasCourseService, CanvasCourseService>(Constants.CanvasDockerName);
+builder.Services.AddHttpClient<ICanvasCourseService, CanvasCourseService>(Constants.CanvasDockerName)
+    .AddAccessTokenManagement(Constants.CanvasDockerName);
 
 var app = builder.Build();
 
