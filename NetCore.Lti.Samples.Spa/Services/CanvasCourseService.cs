@@ -12,13 +12,9 @@ public class CanvasCourseService : ICanvasCourseService
         _client = client;
     }
 
-    public async Task<Tuple<HttpResponseMessage, IEnumerable<CanvasCourse>?>> GetCourses(string token)
+    public async Task<Tuple<HttpResponseMessage, IEnumerable<CanvasCourse>?>> GetCourses()
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/courses")
-        {
-            Headers = { Authorization = new AuthenticationHeaderValue("Bearer", token) },
-        };
-
+        var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/courses");
         var response = await _client.SendAsync(request);
         if (!response.IsSuccessStatusCode)
         {

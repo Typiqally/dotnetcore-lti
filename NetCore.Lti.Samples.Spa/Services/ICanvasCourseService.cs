@@ -4,5 +4,5 @@ namespace NetCore.Lti.Samples.Spa.Services;
 
 public interface ICanvasCourseService
 {
-    Task<Tuple<HttpResponseMessage, IEnumerable<CanvasCourse>?>> GetCourses(string token);
+    Task<Tuple<HttpResponseMessage, IEnumerable<CanvasCourse>?>> GetCourses();
 }

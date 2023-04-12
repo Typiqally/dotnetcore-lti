@@ -21,8 +21,7 @@ public class CourseController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetCourses()
     {
-        var token = await HttpContext.GetTokenAsync(Constants.CanvasDockerName, "access_token");
-        var (response, courses) = await _service.GetCourses(token);
+        var (response, courses) = await _service.GetCourses();
         if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
             return Unauthorized();
