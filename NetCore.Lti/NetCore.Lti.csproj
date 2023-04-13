@@ -7,6 +7,7 @@
         <PackageVersion>1.0.0-alpha.1</PackageVersion>
         <Authors>Typiqally</Authors>
         <PackageProjectUrl>https://github.com/Typiqally/dotnetcore-lti</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Typiqally/dotnetcore-lti</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
