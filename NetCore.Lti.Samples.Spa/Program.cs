@@ -110,6 +110,6 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(static endpoints => { endpoints.MapControllers(); });
+app.MapControllers();
 
 app.Run();
