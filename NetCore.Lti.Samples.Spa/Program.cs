@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using NetCore.Lti;
-using NetCore.Lti.EntityFrameworkCore;
 using NetCore.Lti.Samples.Spa;
 using NetCore.Lti.Samples.Spa.Data;
 using NetCore.Lti.Samples.Spa.Services;
