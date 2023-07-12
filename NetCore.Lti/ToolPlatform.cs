@@ -2,14 +2,14 @@ using NetCore.Lti.Data;
 
 namespace NetCore.Lti;
 
-public record ToolPlatform(
-    string Id,
-    string Name,
-    string Issuer,
-    string ClientId,
-    Uri AccessTokenUrl,
-    Uri AuthorizeUrl,
-    Uri RedirectUri,
-    Uri JwkSetUrl,
-    string KeyId
-) : Entity<string>(Id);
+public record ToolPlatform : Entity<string>
+{
+    public string? Name { get; set; }
+    public string? Issuer { get; set; }
+    public string? ClientId { get; set; }
+    public string? ClientSecret { get; set; }
+    public Uri? AccessTokenUrl { get; set; }
+    public Uri? AuthorizeUrl { get; set; }
+    public Uri? JwkSetUrl { get; set; }
+    public string? KeyId { get; set; }
+}

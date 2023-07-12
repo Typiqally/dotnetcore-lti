@@ -8,7 +8,7 @@ public interface IRepository<TEntity> : IReadOnlyRepository<TEntity>
     void Update(TEntity entity);
     void Delete(object id);
     Task DeleteAsync(object id);
-    void Delete(TEntity? entity);
+    void Delete(TEntity entity);
     int SaveChanges();
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = new());
 }

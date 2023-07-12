@@ -41,7 +41,7 @@ public class EntityFrameworkRepository<TContext, TEntity> : EntityFrameworkReadO
         Delete(entity);
     }
 
-    public void Delete(TEntity? entity)
+    public void Delete(TEntity entity)
     {
         Context.Set<TEntity>().Remove(entity);
     }
