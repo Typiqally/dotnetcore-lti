@@ -6,9 +6,9 @@ namespace NetCore.Lti;
 public class ToolPlatformService : IToolPlatformService
 {
     private readonly HttpClient _http;
-    private readonly IToolPlatformRepository _tenantRepository;
+    private readonly IRepository<ToolPlatform> _tenantRepository;
 
-    public ToolPlatformService(HttpClient http, IToolPlatformRepository tenantRepository)
+    public ToolPlatformService(HttpClient http, IRepository<ToolPlatform> tenantRepository)
     {
         _http = http;
         _tenantRepository = tenantRepository;

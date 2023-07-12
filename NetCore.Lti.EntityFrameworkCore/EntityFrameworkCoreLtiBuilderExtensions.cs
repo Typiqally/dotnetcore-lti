@@ -10,7 +10,7 @@ public static class EntityFrameworkCoreLtiBuilderExtensions
     public static LtiBuilder AddEntityFrameworkRepositories<TContext>(this LtiBuilder builder)
         where TContext : DbContext, ILtiDbContext
     {
-        builder.Services.AddScoped<IToolPlatformRepository, ToolPlatformEntityFrameworkRepository<TContext>>();
+        builder.Services.AddScoped<IRepository<ToolPlatform>, EntityFrameworkRepository<TContext, ToolPlatform>>();
 
         return builder;
     }
