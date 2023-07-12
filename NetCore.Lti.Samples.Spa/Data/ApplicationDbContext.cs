@@ -3,7 +3,7 @@ using NetCore.Lti.EntityFrameworkCore;
 
 namespace NetCore.Lti.Samples.Spa.Data;
  
-public class ApplicationDbContext : LtiDbContext
+public class ApplicationDbContext : DbContext, ILtiDbContext
 {
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
@@ -13,4 +13,6 @@ public class ApplicationDbContext : LtiDbContext
     {
         builder.Entity<ToolPlatform>().HasData(Constants.CanvasDockerToolPlatform);
     }
+
+    public DbSet<ToolPlatform> ToolPlatforms { get; set; }
 }
