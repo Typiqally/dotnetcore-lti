@@ -43,12 +43,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddCors(static options => { options.AddPolicy(name: "ApiPolicy", static policy => { policy.WithOrigins("https://localhost:5173").AllowCredentials(); }); });
 builder.Services.AddLti(options =>
     {
-        var jwk = builder.Configuration.GetSection("LearningTool").GetValue<string>("Jwk");
-
         options.RedirectUri = "/lti/oidc/callback";
-        options.Jwk = new JsonWebKey(jwk);
+        options.Jwk = new JsonWebKey(builder.Configuration["Lti:Jwk"]);
     })
-    .AddEntityFrameworkRepositories<ApplicationDbContext>();
+    .AddPlatforms(builder.Configuration.GetSection("Lti").GetSection("Platforms").Get<List<ToolPlatform>>());
 
 builder.Services.AddAuthentication(static options => { options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme; })
     .AddCookie(static options =>
