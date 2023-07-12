@@ -8,7 +8,7 @@ namespace NetCore.Lti.EntityFrameworkCore;
 public static class EntityFrameworkCoreLtiBuilderExtensions
 {
     public static LtiBuilder AddEntityFrameworkRepositories<TContext>(this LtiBuilder builder)
-        where TContext : DbContext
+        where TContext : DbContext, ILtiDbContext
     {
         builder.Services.AddScoped<IToolPlatformRepository, ToolPlatformEntityFrameworkRepository<TContext>>();
 
