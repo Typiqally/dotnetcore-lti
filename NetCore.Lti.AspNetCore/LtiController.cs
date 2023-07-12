@@ -60,7 +60,12 @@ public class LtiController : ControllerBase
     {
         var message = new LtiRequest(callback.IdToken);
         var platformReference = message.ToolPlatform;
+
         var platform = await _toolPlatformService.GetById(platformReference.Id);
+        if (platform == null)
+        {
+            return NotFound("Unable to find platform");
+        }
 
         var signatureResult = await _tokenValidator.ValidateSignature(platform, message);
         if (signatureResult == null)
