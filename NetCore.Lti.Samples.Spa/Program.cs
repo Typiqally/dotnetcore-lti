@@ -63,8 +63,8 @@ builder.Services.AddAuthentication(static options => { options.DefaultScheme = C
         options.ClientId = config["Canvas:OAuth2:ClientId"];
         options.ClientSecret = config["Canvas:OAuth2:ClientSecret"];
         options.CallbackPath = "/login/canvas";
-        options.AuthorizationEndpoint = "http://canvas.docker/login/oauth2/auth";
-        options.TokenEndpoint = "http://canvas.docker/login/oauth2/token";
+        options.AuthorizationEndpoint = builder.Configuration["Canvas:OAuth2:AuthorizationEndpoint"];
+        options.TokenEndpoint = builder.Configuration["Canvas:OAuth2:TokenEndpoint"];
         options.SaveTokens = true;
     });
 
