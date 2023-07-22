@@ -10,6 +10,7 @@ using NetCore.Lti.Samples.Spa.Data;
 using NetCore.Lti.Samples.Spa.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
 // Add services to the container.
 
@@ -31,7 +32,7 @@ builder.Services.AddSession(static options =>
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("Default");
+    var connectionString = config.GetConnectionString("Default");
 
     options.UseMySql(
         connectionString,
@@ -43,9 +44,9 @@ builder.Services.AddCors(static options => { options.AddPolicy(name: "ApiPolicy"
 builder.Services.AddLti(options =>
     {
         options.RedirectUri = "/lti/oidc/callback";
-        options.Jwk = new JsonWebKey(builder.Configuration["Lti:Jwk"]);
+        options.Jwk = new JsonWebKey(config["Lti:Jwk"]);
     })
-    .AddPlatforms(builder.Configuration.GetSection("Lti").GetSection("Platforms").Get<List<ToolPlatform>>());
+    .AddPlatforms(config.GetSection("Lti").GetSection("Platforms").Get<List<ToolPlatform>>());
 
 builder.Services.AddAuthentication(static options => { options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme; })
     .AddCookie(static options =>
@@ -59,8 +60,8 @@ builder.Services.AddAuthentication(static options => { options.DefaultScheme = C
     })
     .AddOAuth(Constants.CanvasDockerName, options =>
     {
-        options.ClientId = builder.Configuration["Authentication:Canvas:ClientId"];
-        options.ClientSecret = builder.Configuration["Authentication:Canvas:ClientSecret"];
+        options.ClientId = config["Authentication:Canvas:ClientId"];
+        options.ClientSecret = config["Authentication:Canvas:ClientSecret"];
         options.CallbackPath = "/login/canvas";
         options.AuthorizationEndpoint = "http://canvas.docker/login/oauth2/auth";
         options.TokenEndpoint = "http://canvas.docker/login/oauth2/token";
