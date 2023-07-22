@@ -10,6 +10,7 @@ using NetCore.Lti.Samples.Spa.Data;
 using NetCore.Lti.Samples.Spa.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
 // Add services to the container.
 
@@ -31,7 +32,7 @@ builder.Services.AddSession(static options =>
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("Default");
+    var connectionString = config.GetConnectionString("Default");
 
     options.UseMySql(
         connectionString,
@@ -39,13 +40,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     );
 });
 
-builder.Services.AddCors(static options => { options.AddPolicy(name: "ApiPolicy", static policy => { policy.WithOrigins("https://localhost:5173").AllowCredentials(); }); });
+builder.Services.AddCors(options => { options.AddDefaultPolicy(policy => { policy.WithOrigins(config["Lti:TargetUri"]).AllowCredentials(); }); });
 builder.Services.AddLti(options =>
     {
         options.RedirectUri = "/lti/oidc/callback";
-        options.Jwk = new JsonWebKey(builder.Configuration["Lti:Jwk"]);
+        options.Jwk = new JsonWebKey(config["Lti:Jwk"]);
     })
-    .AddPlatforms(builder.Configuration.GetSection("Lti").GetSection("Platforms").Get<List<ToolPlatform>>());
+    .AddPlatforms(config.GetSection("Lti").GetSection("Platforms").Get<List<ToolPlatform>>());
 
 builder.Services.AddAuthentication(static options => { options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme; })
     .AddCookie(static options =>
@@ -59,11 +60,11 @@ builder.Services.AddAuthentication(static options => { options.DefaultScheme = C
     })
     .AddOAuth(Constants.CanvasDockerName, options =>
     {
-        options.ClientId = builder.Configuration["Authentication:Canvas:ClientId"];
-        options.ClientSecret = builder.Configuration["Authentication:Canvas:ClientSecret"];
+        options.ClientId = config["Canvas:OAuth2:ClientId"];
+        options.ClientSecret = config["Canvas:OAuth2:ClientSecret"];
         options.CallbackPath = "/login/canvas";
-        options.AuthorizationEndpoint = "http://canvas.docker/login/oauth2/auth";
-        options.TokenEndpoint = "http://canvas.docker/login/oauth2/token";
+        options.AuthorizationEndpoint = builder.Configuration["Canvas:OAuth2:AuthorizationEndpoint"];
+        options.TokenEndpoint = builder.Configuration["Canvas:OAuth2:TokenEndpoint"];
         options.SaveTokens = true;
     });
 
@@ -80,7 +81,7 @@ builder.Services.AddScoped<TokenClient>(static provider =>
     });
 });
 
-builder.Services.AddHttpClient(Constants.CanvasDockerName, static (_, client) => { client.BaseAddress = new Uri("http://canvas.docker/"); });
+builder.Services.AddHttpClient(Constants.CanvasDockerName, (_, client) => { client.BaseAddress = new Uri(config["Canvas:ApiUrl"]); });
 builder.Services.AddHttpClient<ICanvasCourseService, CanvasCourseService>(Constants.CanvasDockerName)
     .AddAccessTokenManagement(Constants.CanvasDockerName);
 
@@ -101,7 +102,7 @@ else
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseCors("ApiPolicy");
+app.UseCors();
 
 app.UseSession();
 app.UseAuthentication();
