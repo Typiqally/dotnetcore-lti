@@ -81,7 +81,7 @@ builder.Services.AddScoped<TokenClient>(static provider =>
     });
 });
 
-builder.Services.AddHttpClient(Constants.CanvasDockerName, static (_, client) => { client.BaseAddress = new Uri("http://canvas.docker/"); });
+builder.Services.AddHttpClient(Constants.CanvasDockerName, (_, client) => { client.BaseAddress = new Uri(config["Canvas:ApiUrl"]); });
 builder.Services.AddHttpClient<ICanvasCourseService, CanvasCourseService>(Constants.CanvasDockerName)
     .AddAccessTokenManagement(Constants.CanvasDockerName);
 
