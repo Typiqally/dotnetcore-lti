@@ -40,7 +40,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     );
 });
 
-builder.Services.AddCors(options => { options.AddPolicy(name: "ApiPolicy",  policy => { policy.WithOrigins(config["Lti:TargetUri"]).AllowCredentials(); }); });
+builder.Services.AddCors(options => { options.AddDefaultPolicy(policy => { policy.WithOrigins(config["Lti:TargetUri"]).AllowCredentials(); }); });
 builder.Services.AddLti(options =>
     {
         options.RedirectUri = "/lti/oidc/callback";
@@ -102,7 +102,7 @@ else
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseCors("ApiPolicy");
+app.UseCors();
 
 app.UseSession();
 app.UseAuthentication();
