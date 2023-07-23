@@ -1,5 +1,5 @@
 using IdentityModel.Jwk;
-using NetCore.Persistence.Abstractions;
+using Tpcly.Persistence.Abstractions;
 
 namespace Tpcly.Lti;
 

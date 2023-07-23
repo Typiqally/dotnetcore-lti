@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using NetCore.Persistence.Memory;
+using Tpcly.Persistence.Memory;
 
 namespace Tpcly.Lti;
 

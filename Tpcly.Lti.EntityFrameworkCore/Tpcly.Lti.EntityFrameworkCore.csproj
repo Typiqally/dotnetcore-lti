@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="NetCore.Persistence.EntityFrameworkCore" Version="1.0.0-alpha.1" />
+      <PackageReference Include="Tpcly.Persistence.EntityFrameworkCore" Version="1.0.0-alpha.1" />
     </ItemGroup>
 
 </Project>

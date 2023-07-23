@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using NetCore.Persistence.EntityFrameworkCore;
+using Tpcly.Persistence.EntityFrameworkCore;
 
 namespace Tpcly.Lti.EntityFrameworkCore;
 
