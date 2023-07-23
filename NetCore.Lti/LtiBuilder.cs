@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using NetCore.Lti.Data;
+using NetCore.Persistence.Memory;
 
 namespace NetCore.Lti;
 
@@ -14,7 +14,10 @@ public class LtiBuilder
 
     public LtiBuilder AddPlatforms(IEnumerable<ToolPlatform> platforms)
     {
-        Services.AddScoped<IRepository<ToolPlatform>, MemoryBasedRepository<ToolPlatform>>(_ => new MemoryBasedRepository<ToolPlatform>(platforms));
+        Services.AddMemoryBasedRepository<ToolPlatform>(options =>
+        {
+            options.Data = platforms.ToDictionary(static e => e.Id as object, static e => e);
+        });
 
         return this;
     }
