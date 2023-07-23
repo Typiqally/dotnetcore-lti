@@ -1,5 +1,5 @@
 using IdentityModel.Jwk;
-using NetCore.Lti.Data;
+using NetCore.Persistence.Abstractions;
 
 namespace NetCore.Lti;
 
