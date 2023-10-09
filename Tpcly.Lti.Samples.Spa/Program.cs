@@ -14,21 +14,12 @@ var config = builder.Configuration;
 
 // Add services to the container.
 
-builder.Services.AddControllers()
-    .AddSessionStateTempDataProvider();
+builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(static options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(5);
-
-    options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.SameSite = SameSiteMode.None;
-});
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -104,7 +95,6 @@ app.UseRouting();
 
 app.UseCors();
 
-app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 

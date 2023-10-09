@@ -11,4 +11,5 @@ public class ApplicationDbContext : DbContext, ILtiDbContext
     }
 
     public DbSet<ToolPlatform> ToolPlatforms { get; set; }
+    public DbSet<LaunchSession> LaunchSessions { get; set; }
 }

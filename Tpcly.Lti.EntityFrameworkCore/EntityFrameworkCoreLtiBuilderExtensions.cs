@@ -9,6 +9,7 @@ public static class EntityFrameworkCoreLtiBuilderExtensions
         where TContext : DbContext, ILtiDbContext
     {
         builder.Services.AddEntityFrameworkRepository<TContext, ToolPlatform>();
+        builder.Services.AddEntityFrameworkRepository<TContext, LaunchSession>();
 
         return builder;
     }

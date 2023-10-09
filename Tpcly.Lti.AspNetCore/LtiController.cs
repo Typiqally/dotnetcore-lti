@@ -1,5 +1,5 @@
+using System.Net.Mime;
 using System.Security.Cryptography;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -12,17 +12,20 @@ public class LtiController : ControllerBase
 {
     private readonly ILogger _logger;
     private readonly ILtiTokenValidator _tokenValidator;
+    private readonly ILaunchSessionService _launchSessionService;
     private readonly IToolPlatformService _toolPlatformService;
     private readonly LtiOptions _ltiOptions;
 
     public LtiController(
         ILogger<LtiController> logger,
         ILtiTokenValidator tokenValidator,
+        ILaunchSessionService launchSessionService,
         IToolPlatformService toolPlatformService,
         IOptions<LtiOptions> options)
     {
         _logger = logger;
         _tokenValidator = tokenValidator;
+        _launchSessionService = launchSessionService;
         _toolPlatformService = toolPlatformService;
         _ltiOptions = options.Value;
     }
@@ -45,14 +48,23 @@ public class LtiController : ControllerBase
         var authorizeRedirectUrl = launchRequest.CreateAuthorizeUrl(
             authorizeUrl,
             new Uri(hostUrl, _ltiOptions.RedirectUri),
-            nonce
+            nonce,
+            launchRequest.LoginHint
         );
+
+        await _launchSessionService.Create(new LaunchSession
+        {
+            Id = launchRequest.LoginHint,
+            Issuer = launchRequest.Issuer,
+            ClientId = launchRequest.ClientId,
+            TargetLinkUri = launchRequest.TargetLinkUri,
+            LtiStorageTarget = launchRequest.LtiStorageTarget,
+            Nonce = nonce,
+        });
 
         _logger.LogDebug("Redirecting launch to {AuthorizeUrl}", authorizeRedirectUrl);
 
-        HttpContext.Session.SetString("nonce", nonce);
-
-        return Redirect(authorizeRedirectUrl);
+        return Content($"<script>window.location.replace(\"{authorizeRedirectUrl}\")</script>", MediaTypeNames.Text.Html);
     }
 
     [HttpPost("oidc/callback")]
@@ -73,20 +85,19 @@ public class LtiController : ControllerBase
             return BadRequest("Unable to verify identity token");
         }
 
+        var session = await _launchSessionService.GetById(callback.State);
+        if (session == null)
+        {
+            return BadRequest("Unable to determine session");
+        }
+
         var nonce = message.Payload.Nonce;
-        if (nonce == null || !Equals(nonce, HttpContext.Session.GetString("nonce")))
+        if (nonce == null || !Equals(nonce, session.Nonce))
         {
             return BadRequest("Nonce mismatch");
         }
-
-        var targetLinkUri = message.TargetLinkUri;
-        if (targetLinkUri == null)
-        {
-            return BadRequest("No target link uri found in identity token claims");
-        }
-
-        HttpContext.Session.SetString("id_token", callback.IdToken);
-
-        return Redirect(targetLinkUri.ToString());
+        
+        _logger.LogDebug("Redirecting callback to {CallbackUrl}", message.TargetLinkUri);
+        return Redirect(message.TargetLinkUri.ToString());
     }
 }
