@@ -31,7 +31,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     );
 });
 
-builder.Services.AddCors(options => { options.AddDefaultPolicy(policy => { policy.WithOrigins(config["Lti:TargetUri"]).AllowCredentials(); }); });
+builder.Services.AddCors(options => { options.AddDefaultPolicy(policy => { policy.WithOrigins(config["Lti:TargetUri"]).AllowAnyMethod().AllowAnyHeader().AllowCredentials(); }); });
 builder.Services.AddLti(options =>
     {
         options.RedirectUri = "/lti/oidc/callback";
