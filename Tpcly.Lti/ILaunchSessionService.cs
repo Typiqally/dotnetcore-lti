@@ -2,7 +2,11 @@ namespace Tpcly.Lti;
 
 public interface ILaunchSessionService
 {
-    Task<LaunchSession?> GetById(string id);
+    Task<LaunchSession?> Get(string state);
     
-    Task<LaunchSession> Create(LaunchSession session);
+    Task<Tuple<string, LaunchSession>> Start(LtiOpenIdConnectLaunch launchRequest);
+
+    Task<Tuple<string, LaunchSessionCredentials>> StoreCredentials(LaunchSession session, string identityToken);
+
+    Task<LaunchSessionCredentials?> ExchangeToken(string token, string state);
 }

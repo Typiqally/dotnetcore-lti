@@ -8,6 +8,7 @@ using Tpcly.Lti;
 using Tpcly.Lti.Samples.Spa;
 using Tpcly.Lti.Samples.Spa.Data;
 using Tpcly.Lti.Samples.Spa.Services;
+using Tpcly.Persistence.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -58,6 +59,18 @@ builder.Services.AddAuthentication(static options => { options.DefaultScheme = C
         options.TokenEndpoint = builder.Configuration["Canvas:OAuth2:TokenEndpoint"];
         options.SaveTokens = true;
     });
+
+builder.Services.AddMemoryBasedRepository<LaunchSession>(static options =>
+{
+    options.Data = new Dictionary<object, LaunchSession>();
+    options.ReadOnly = false;
+});
+
+builder.Services.AddMemoryBasedRepository<LaunchSessionCredentials>(static options =>
+{
+    options.Data = new Dictionary<object, LaunchSessionCredentials>();
+    options.ReadOnly = false;
+});
 
 builder.Services.AddScoped<TokenClient>(static provider =>
 {

@@ -1,5 +1,4 @@
 using System.Net.Mime;
-using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -44,7 +43,7 @@ public class LtiController : ControllerBase
         var authorizeUrl = new Uri(new Uri(origin), CanvasConstants.AuthorizationEndpoint);
         var hostUrl = new Uri($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}");
 
-        var nonce = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+        var (nonce, _) = await _launchSessionService.Start(launchRequest);
         var authorizeRedirectUrl = launchRequest.CreateAuthorizeUrl(
             authorizeUrl,
             new Uri(hostUrl, _ltiOptions.RedirectUri),
@@ -52,18 +51,7 @@ public class LtiController : ControllerBase
             launchRequest.LoginHint
         );
 
-        await _launchSessionService.Create(new LaunchSession
-        {
-            Id = launchRequest.LoginHint,
-            Issuer = launchRequest.Issuer,
-            ClientId = launchRequest.ClientId,
-            TargetLinkUri = launchRequest.TargetLinkUri,
-            LtiStorageTarget = launchRequest.LtiStorageTarget,
-            Nonce = nonce,
-        });
-
         _logger.LogDebug("Redirecting launch to {AuthorizeUrl}", authorizeRedirectUrl);
-
         return Content($"<script>window.location.replace(\"{authorizeRedirectUrl}\")</script>", MediaTypeNames.Text.Html);
     }
 
@@ -71,12 +59,17 @@ public class LtiController : ControllerBase
     public async Task<IActionResult> ProcessOidcCallback([ModelBinder(typeof(LtiOpenIdCallbackLaunchModelBinder))] LtiOpenIdConnectCallback callback)
     {
         var message = new LtiRequest(callback.IdToken);
-        var platformReference = message.ToolPlatform;
 
-        var platform = await _toolPlatformService.GetById(platformReference.Id);
+        var toolPlatformReference = message.ToolPlatform;
+        if (toolPlatformReference == null)
+        {
+            return BadRequest("LTI request does not contain tool platform reference");
+        }
+
+        var platform = await _toolPlatformService.GetById(toolPlatformReference.Id);
         if (platform == null)
         {
-            return NotFound("Unable to find platform");
+            return NotFound($"Unable to find platform {toolPlatformReference.Id}");
         }
 
         var signatureResult = await _tokenValidator.ValidateSignature(platform, message);
@@ -85,7 +78,7 @@ public class LtiController : ControllerBase
             return BadRequest("Unable to verify identity token");
         }
 
-        var session = await _launchSessionService.GetById(callback.State);
+        var session = await _launchSessionService.Get(callback.State);
         if (session == null)
         {
             return BadRequest("Unable to determine session");
@@ -96,8 +89,24 @@ public class LtiController : ControllerBase
         {
             return BadRequest("Nonce mismatch");
         }
-        
-        _logger.LogDebug("Redirecting callback to {CallbackUrl}", message.TargetLinkUri);
-        return Redirect(message.TargetLinkUri.ToString());
+
+        var (token, _) = await _launchSessionService.StoreCredentials(session, callback.IdToken);
+
+        var builder = new UriBuilder(message.TargetLinkUri.ToString())
+        {
+            Query = $"state={callback.State}&token={token}",
+        };
+
+        var redirectUri = builder.ToString();
+
+        _logger.LogDebug("Redirecting callback to {RedirectUri}", redirectUri);
+        return Redirect(redirectUri);
+    }
+
+    [HttpPost("exchange")]
+    public async Task<IActionResult> ExchangeToken([FromBody] LaunchSessionExchangeRequest request)
+    {
+        var credentials = await _launchSessionService.ExchangeToken(request.Token, request.State);
+        return Ok(credentials);
     }
 }

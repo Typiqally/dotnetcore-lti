@@ -9,5 +9,6 @@ public record LaunchSession : Entity<string>
     public Uri TargetLinkUri { get; set; } = null!;
     public string? LtiStorageTarget { get; set; }
     public string Nonce { get; set; } = null!;
-    public DateTime CreatedAt = DateTime.Now;
+
+    public DateTime CreatedAt { get; } = DateTime.Now;
 }
