@@ -103,7 +103,7 @@ public class LtiController : ControllerBase
 
         var builder = new UriBuilder(message.TargetLinkUri.ToString())
         {
-            Query = $"state={callback.State}&token={token}",
+            Query = $"token={token}",
         };
 
         var redirectUri = builder.ToString();
@@ -113,9 +113,14 @@ public class LtiController : ControllerBase
     }
 
     [HttpPost("exchange")]
-    public async Task<IActionResult> ExchangeToken([FromBody] LaunchSessionExchangeRequest request)
+    public async Task<IActionResult> ExchangeToken([FromBody] LaunchSessionExchangeRequest exchangeRequest)
     {
-        var credentials = await _launchSessionService.ExchangeToken(request.Token, request.State);
+        var credentials = await _launchSessionService.ExchangeToken(exchangeRequest.Token);
+        if (credentials == null)
+        {
+            return BadRequest("Invalid token");
+        }
+        
         return Ok(credentials);
     }
 }
