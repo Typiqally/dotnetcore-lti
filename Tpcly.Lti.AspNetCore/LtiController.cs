@@ -1,4 +1,6 @@
 using System.Net.Mime;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -43,12 +45,13 @@ public class LtiController : ControllerBase
         var authorizeUrl = new Uri(new Uri(origin), CanvasConstants.AuthorizationEndpoint);
         var hostUrl = new Uri($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}");
 
-        var (nonce, _) = await _launchSessionService.Start(launchRequest);
+        var state = Base64UrlTextEncoder.Encode(RandomNumberGenerator.GetBytes(32));
+        var (nonce, _) = await _launchSessionService.Start(state, launchRequest);
         var authorizeRedirectUrl = launchRequest.CreateAuthorizeUrl(
             authorizeUrl,
             new Uri(hostUrl, _ltiOptions.RedirectUri),
             nonce,
-            launchRequest.LoginHint
+            state
         );
 
         _logger.LogDebug("Redirecting launch to {AuthorizeUrl}", authorizeRedirectUrl);
