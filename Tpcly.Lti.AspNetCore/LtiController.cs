@@ -55,7 +55,13 @@ public class LtiController : ControllerBase
         );
 
         _logger.LogDebug("Redirecting launch to {AuthorizeUrl}", authorizeRedirectUrl);
-        return Content($"<script>window.location.replace(\"{authorizeRedirectUrl}\")</script>", MediaTypeNames.Text.Html);
+
+        if (Request.Headers.UserAgent.ToString()!.Contains("Safari"))
+        {
+            return Content($"<script>window.location.replace('{authorizeRedirectUrl}')</script>", MediaTypeNames.Text.Html);
+        }
+
+        return Redirect(authorizeRedirectUrl);
     }
 
     [HttpPost("oidc/callback")]
