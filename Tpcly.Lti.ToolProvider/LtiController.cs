@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Tpcly.Lti.Canvas;
 
-namespace Tpcly.Lti.AspNetCore;
+namespace Tpcly.Lti.ToolProvider;
 
 [ApiController]
 [Route("/lti")]

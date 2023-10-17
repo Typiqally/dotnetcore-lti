@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tpcly.Lti", "Tpcly.Lti\Tpcly.Lti.csproj", "{8D84892E-ACDF-4F47-BC75-54841C6305B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tpcly.Lti.AspNetCore", "Tpcly.Lti.AspNetCore\Tpcly.Lti.AspNetCore.csproj", "{1BEF89DB-2F50-46AA-BBDF-6730805A706F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tpcly.Lti.ToolProvider", "Tpcly.Lti.ToolProvider\Tpcly.Lti.ToolProvider.csproj", "{1BEF89DB-2F50-46AA-BBDF-6730805A706F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tpcly.Lti.EntityFrameworkCore", "Tpcly.Lti.EntityFrameworkCore\Tpcly.Lti.EntityFrameworkCore.csproj", "{08AEBAEF-9B3A-4414-9D8E-1764A51BB61A}"
 EndProject

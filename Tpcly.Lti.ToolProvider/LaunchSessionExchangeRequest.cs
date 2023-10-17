@@ -1,4 +1,4 @@
-namespace Tpcly.Lti.AspNetCore;
+namespace Tpcly.Lti.ToolProvider;
 
 public class LaunchSessionExchangeRequest
 {
