@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tpcly.Lti.Samples.Spa", "Tp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tpcly.Lti.Canvas", "Tpcly.Lti.Canvas\Tpcly.Lti.Canvas.csproj", "{17210C59-68F9-4A9E-BC9D-86F2A8577BC6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tpcly.Lti.Samples.WebApi", "Tpcly.Lti.Samples.WebApi\Tpcly.Lti.Samples.WebApi.csproj", "{8FDDD7B1-AF67-4ACA-B784-46A591B99E99}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,8 +40,13 @@ Global
 		{17210C59-68F9-4A9E-BC9D-86F2A8577BC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17210C59-68F9-4A9E-BC9D-86F2A8577BC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17210C59-68F9-4A9E-BC9D-86F2A8577BC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FDDD7B1-AF67-4ACA-B784-46A591B99E99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FDDD7B1-AF67-4ACA-B784-46A591B99E99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FDDD7B1-AF67-4ACA-B784-46A591B99E99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FDDD7B1-AF67-4ACA-B784-46A591B99E99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D1B6BE53-2036-44CF-A072-F1A8228DBC1E} = {40193AAB-53A3-4BBB-8937-98B09C2C6A55}
+		{8FDDD7B1-AF67-4ACA-B784-46A591B99E99} = {40193AAB-53A3-4BBB-8937-98B09C2C6A55}
 	EndGlobalSection
 EndGlobal
