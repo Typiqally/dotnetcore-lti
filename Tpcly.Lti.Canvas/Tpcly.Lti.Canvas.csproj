@@ -10,4 +10,8 @@
         <RepositoryUrl>https://github.com/Typiqally/dotnetcore-lti</RepositoryUrl>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Tpcly.Lti\Tpcly.Lti.csproj" />
+    </ItemGroup>
+
 </Project>
