@@ -16,7 +16,13 @@ public class ToolPlatformService : IToolPlatformService
 
     public async Task<ToolPlatform?> GetById(string id)
     {
-        return  await _tenantRepository.SingleOrDefaultAsync(platform => platform.Id == id);
+        return await _tenantRepository.SingleOrDefaultAsync(platform => platform.Id == id);
+    }
+
+    public async Task<JsonWebKeySet?> GetJwks(string id)
+    {
+        var toolPlatform = await _tenantRepository.SingleOrDefaultAsync(platform => platform.Id == id);
+        return toolPlatform != null ? await GetJwks(toolPlatform) : null;
     }
 
     public async Task<JsonWebKeySet?> GetJwks(ToolPlatform tenant)
