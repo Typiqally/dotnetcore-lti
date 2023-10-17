@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Tpcly.Lti.Canvas\Tpcly.Lti.Canvas.csproj" />
       <ProjectReference Include="..\Tpcly.Lti\Tpcly.Lti.csproj" />
     </ItemGroup>
 

@@ -1,4 +1,4 @@
-namespace Tpcly.Lti;
+namespace Tpcly.Lti.Canvas;
 
 public static class CanvasConstants
 {
