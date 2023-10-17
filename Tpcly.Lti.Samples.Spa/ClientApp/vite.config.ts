@@ -9,8 +9,8 @@ export default ({mode}) => {
     return defineConfig({
         resolve: {
             alias: {
-                '@': resolve(__dirname, 'src')
-            }
+                "@": resolve(__dirname, "src"),
+            },
         },
         server: {
             https: {

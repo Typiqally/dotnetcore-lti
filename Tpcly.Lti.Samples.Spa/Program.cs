@@ -8,27 +8,19 @@ using Tpcly.Lti;
 using Tpcly.Lti.Samples.Spa;
 using Tpcly.Lti.Samples.Spa.Data;
 using Tpcly.Lti.Samples.Spa.Services;
+using Tpcly.Persistence.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
 // Add services to the container.
 
-builder.Services.AddControllers()
-    .AddSessionStateTempDataProvider();
+builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(static options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(5);
-
-    options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.SameSite = SameSiteMode.None;
-});
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -40,7 +32,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     );
 });
 
-builder.Services.AddCors(options => { options.AddDefaultPolicy(policy => { policy.WithOrigins(config["Lti:TargetUri"]).AllowCredentials(); }); });
+builder.Services.AddCors(options => { options.AddDefaultPolicy(policy => { policy.WithOrigins(config["Lti:TargetUri"]).AllowAnyMethod().AllowAnyHeader().AllowCredentials(); }); });
 builder.Services.AddLti(options =>
     {
         options.RedirectUri = "/lti/oidc/callback";
@@ -67,6 +59,18 @@ builder.Services.AddAuthentication(static options => { options.DefaultScheme = C
         options.TokenEndpoint = builder.Configuration["Canvas:OAuth2:TokenEndpoint"];
         options.SaveTokens = true;
     });
+
+builder.Services.AddMemoryBasedRepository<LaunchSession>(static options =>
+{
+    options.Data = new Dictionary<object, LaunchSession>();
+    options.ReadOnly = false;
+});
+
+builder.Services.AddMemoryBasedRepository<LaunchSessionCredentials>(static options =>
+{
+    options.Data = new Dictionary<object, LaunchSessionCredentials>();
+    options.ReadOnly = false;
+});
 
 builder.Services.AddScoped<TokenClient>(static provider =>
 {
@@ -104,7 +108,6 @@ app.UseRouting();
 
 app.UseCors();
 
-app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 

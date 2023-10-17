@@ -1,17 +1,17 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import Authorize from "@/components/Authorize.vue";
-import Courses from "@/components/Courses.vue";
+import Index from "@/views/auth/Index.vue";
+import Launch from "@/views/Launch.vue";
 
 const routes = [
     {
         path: '/',
-        name: 'Courses',
-        component: Courses
+        name: 'Launch',
+        component: Launch
     },
     {
         path: '/auth',
         name: 'Authorize',
-        component: Authorize
+        component: Index
     },
 ]
 const router = createRouter({
