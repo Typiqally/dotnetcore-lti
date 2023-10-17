@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{4019
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tpcly.Lti.Samples.Spa", "Tpcly.Lti.Samples.Spa\Tpcly.Lti.Samples.Spa.csproj", "{D1B6BE53-2036-44CF-A072-F1A8228DBC1E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tpcly.Lti.Canvas", "Tpcly.Lti.Canvas\Tpcly.Lti.Canvas.csproj", "{17210C59-68F9-4A9E-BC9D-86F2A8577BC6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{D1B6BE53-2036-44CF-A072-F1A8228DBC1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1B6BE53-2036-44CF-A072-F1A8228DBC1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1B6BE53-2036-44CF-A072-F1A8228DBC1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17210C59-68F9-4A9E-BC9D-86F2A8577BC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17210C59-68F9-4A9E-BC9D-86F2A8577BC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17210C59-68F9-4A9E-BC9D-86F2A8577BC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17210C59-68F9-4A9E-BC9D-86F2A8577BC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D1B6BE53-2036-44CF-A072-F1A8228DBC1E} = {40193AAB-53A3-4BBB-8937-98B09C2C6A55}

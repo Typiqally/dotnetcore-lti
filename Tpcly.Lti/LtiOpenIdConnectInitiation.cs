@@ -3,7 +3,7 @@ using IdentityModel.Client;
 
 namespace Tpcly.Lti;
 
-public record LtiOpenIdConnectLaunch(
+public record LtiOpenIdConnectInitiation(
     string Issuer,
     string LoginHint,
     string ClientId,

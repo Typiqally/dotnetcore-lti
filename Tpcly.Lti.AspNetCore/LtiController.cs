@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Tpcly.Lti.Canvas;
 
 namespace Tpcly.Lti.AspNetCore;
 
@@ -32,12 +33,12 @@ public class LtiController : ControllerBase
     }
 
     [HttpPost("oidc/auth")]
-    public async Task<IActionResult> LaunchOidcAuth([ModelBinder(typeof(LtiOpenIdConnectLaunchModelBinder))] LtiOpenIdConnectLaunch launchRequest)
+    public async Task<IActionResult> LaunchOidcAuth([ModelBinder(typeof(LtiOpenIdConnectLaunchModelBinder))] LtiOpenIdConnectInitiation initiationRequest)
     {
         var origin = Request.Headers.Origin.SingleOrDefault();
 
         // Currently there is only support for Canvas LMS
-        if (launchRequest.Issuer != CanvasConstants.Issuer || origin == null)
+        if (initiationRequest.Issuer != CanvasConstants.Issuer || origin == null)
         {
             return BadRequest("Invalid issuer");
         }
@@ -46,8 +47,8 @@ public class LtiController : ControllerBase
         var hostUrl = new Uri($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}");
 
         var state = Base64UrlTextEncoder.Encode(RandomNumberGenerator.GetBytes(32));
-        var (nonce, _) = await _launchSessionService.Start(state, launchRequest);
-        var authorizeRedirectUrl = launchRequest.CreateAuthorizeUrl(
+        var (nonce, _) = await _launchSessionService.Start(state, initiationRequest);
+        var authorizeRedirectUrl = initiationRequest.CreateAuthorizeUrl(
             authorizeUrl,
             new Uri(hostUrl, _ltiOptions.RedirectUri),
             nonce,

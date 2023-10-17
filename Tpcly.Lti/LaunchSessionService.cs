@@ -36,16 +36,16 @@ public class LaunchSessionService : ILaunchSessionService
         return await _sessionRepository.FindAsync(state);
     }
 
-    public async Task<Tuple<string, LaunchSession>> Start(string state, LtiOpenIdConnectLaunch launchRequest)
+    public async Task<Tuple<string, LaunchSession>> Start(string state, LtiOpenIdConnectInitiation initiationRequest)
     {
         var nonce = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
         var session = new LaunchSession
         {
             Id = state,
-            Issuer = launchRequest.Issuer,
-            ClientId = launchRequest.ClientId,
-            TargetLinkUri = launchRequest.TargetLinkUri,
-            LtiStorageTarget = launchRequest.LtiStorageTarget,
+            Issuer = initiationRequest.Issuer,
+            ClientId = initiationRequest.ClientId,
+            TargetLinkUri = initiationRequest.TargetLinkUri,
+            LtiStorageTarget = initiationRequest.LtiStorageTarget,
             Nonce = nonce,
         };
 
