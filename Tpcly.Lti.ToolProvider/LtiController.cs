@@ -68,7 +68,7 @@ public class LtiController : ControllerBase
     [HttpPost("oidc/callback")]
     public async Task<IActionResult> ProcessOidcCallback([ModelBinder(typeof(LtiOpenIdCallbackLaunchModelBinder))] LtiOpenIdConnectCallback callback)
     {
-        var message = new LtiRequest(callback.IdToken);
+        var message = new LtiMessage(callback.IdToken);
 
         var toolPlatformReference = message.ToolPlatform;
         if (toolPlatformReference == null)

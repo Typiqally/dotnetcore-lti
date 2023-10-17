@@ -20,10 +20,10 @@ public class LtiTokenValidator : ILtiTokenValidator
     {
     }
 
-    public async Task<Tuple<ClaimsPrincipal, SecurityToken>?> ValidateSignature(ToolPlatform toolPlatform, LtiRequest request, TokenValidationParameters? validationParameters = null)
+    public async Task<Tuple<ClaimsPrincipal, SecurityToken>?> ValidateSignature(ToolPlatform toolPlatform, LtiMessage message, TokenValidationParameters? validationParameters = null)
     {
         var platformJwks = await _platformService.GetJwks(toolPlatform);
-        var signingKey = request.GetSigningKey(platformJwks);
+        var signingKey = message.GetSigningKey(platformJwks);
 
         validationParameters ??= new TokenValidationParameters();
 
@@ -31,7 +31,7 @@ public class LtiTokenValidator : ILtiTokenValidator
         validationParameters.ValidIssuer = toolPlatform.Issuer;
         validationParameters.IssuerSigningKey = signingKey.ToRsaSecurityKey();
 
-        var claimsPrincipal = _jwtHandler.ValidateToken(request.RawData, validationParameters, out var validatedToken);
+        var claimsPrincipal = _jwtHandler.ValidateToken(message.RawData, validationParameters, out var validatedToken);
         return new Tuple<ClaimsPrincipal, SecurityToken>(claimsPrincipal, validatedToken);
     }
 }

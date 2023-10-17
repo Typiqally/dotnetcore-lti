@@ -4,9 +4,9 @@ using Tpcly.Lti.Extensions;
 
 namespace Tpcly.Lti;
 
-public class LtiRequest : JwtSecurityToken
+public class LtiMessage : JwtSecurityToken
 {
-    public LtiRequest(string idToken) : base(idToken)
+    public LtiMessage(string idToken) : base(idToken)
     {
     }
 
