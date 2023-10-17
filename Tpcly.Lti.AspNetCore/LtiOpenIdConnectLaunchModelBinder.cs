@@ -7,7 +7,7 @@ public class LtiOpenIdConnectLaunchModelBinder : IModelBinder
     public Task BindModelAsync(ModelBindingContext bindingContext)
     {
         var form = bindingContext.HttpContext.Request.Form;
-        var launchRequest = new LtiOpenIdConnectLaunch(
+        var launchRequest = new LtiOpenIdConnectInitiation(
             form["iss"],
             form["login_hint"],
             form["client_id"],
