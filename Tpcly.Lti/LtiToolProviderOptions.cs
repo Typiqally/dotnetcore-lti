@@ -2,7 +2,7 @@ using IdentityModel.Jwk;
 
 namespace Tpcly.Lti;
 
-public class LtiOptions
+public class LtiToolProviderOptions
 {
     public string RedirectUri { get; set; }
     

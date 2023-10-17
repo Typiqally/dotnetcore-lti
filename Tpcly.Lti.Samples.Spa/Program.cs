@@ -32,8 +32,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     );
 });
 
-builder.Services.AddCors(options => { options.AddDefaultPolicy(policy => { policy.WithOrigins(config["Lti:TargetUri"]).AllowAnyMethod().AllowAnyHeader().AllowCredentials(); }); });
-builder.Services.AddLti(options =>
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy => { policy.WithOrigins(config["Lti:TargetUri"]).AllowAnyMethod().AllowAnyHeader().AllowCredentials(); });
+});
+
+builder.Services.AddLti()
+    .AddToolProvider(options =>
     {
         options.RedirectUri = "/lti/oidc/callback";
         options.Jwk = new JsonWebKey(config["Lti:Jwk"]);

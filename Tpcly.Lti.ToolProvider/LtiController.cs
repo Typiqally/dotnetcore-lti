@@ -16,20 +16,20 @@ public class LtiController : ControllerBase
     private readonly ILtiTokenValidator _tokenValidator;
     private readonly ILaunchSessionService _launchSessionService;
     private readonly IToolPlatformService _toolPlatformService;
-    private readonly LtiOptions _ltiOptions;
+    private readonly LtiToolProviderOptions _toolProviderOptions;
 
     public LtiController(
         ILogger<LtiController> logger,
         ILtiTokenValidator tokenValidator,
         ILaunchSessionService launchSessionService,
         IToolPlatformService toolPlatformService,
-        IOptions<LtiOptions> options)
+        IOptions<LtiToolProviderOptions> toolProviderOptions)
     {
         _logger = logger;
         _tokenValidator = tokenValidator;
         _launchSessionService = launchSessionService;
         _toolPlatformService = toolPlatformService;
-        _ltiOptions = options.Value;
+        _toolProviderOptions = toolProviderOptions.Value;
     }
 
     [HttpPost("oidc/auth")]
@@ -50,7 +50,7 @@ public class LtiController : ControllerBase
         var (nonce, _) = await _launchSessionService.Start(state, initiationRequest);
         var authorizeRedirectUrl = initiationRequest.CreateAuthorizeUrl(
             authorizeUrl,
-            new Uri(hostUrl, _ltiOptions.RedirectUri),
+            new Uri(hostUrl, _toolProviderOptions.RedirectUri),
             nonce,
             state
         );
