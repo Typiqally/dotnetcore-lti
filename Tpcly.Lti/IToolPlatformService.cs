@@ -8,5 +8,5 @@ public interface IToolPlatformService
 
     Task<JsonWebKeySet?> GetJwks(string id);
 
-    Task<JsonWebKeySet?> GetJwks(ToolPlatform tenant);
+    Task<JsonWebKeySet?> GetJwks(ToolPlatform toolPlatform);
 }

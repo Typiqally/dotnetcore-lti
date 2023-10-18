@@ -25,9 +25,9 @@ public class ToolPlatformService : IToolPlatformService
         return toolPlatform != null ? await GetJwks(toolPlatform) : null;
     }
 
-    public async Task<JsonWebKeySet?> GetJwks(ToolPlatform tenant)
+    public async Task<JsonWebKeySet?> GetJwks(ToolPlatform toolPlatform)
     {
-        var response = await _http.GetAsync(tenant.JwkSetUrl);
+        var response = await _http.GetAsync(toolPlatform.JwkSetUrl);
         return new JsonWebKeySet(await response.Content.ReadAsStringAsync());
     }
 }
