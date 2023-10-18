@@ -13,20 +13,17 @@ namespace Tpcly.Lti.ToolProvider;
 public class LtiController : ControllerBase
 {
     private readonly ILogger _logger;
-    private readonly ILtiTokenValidator _tokenValidator;
     private readonly ILaunchSessionService _launchSessionService;
     private readonly IToolPlatformService _toolPlatformService;
     private readonly LtiToolProviderOptions _toolProviderOptions;
 
     public LtiController(
         ILogger<LtiController> logger,
-        ILtiTokenValidator tokenValidator,
         ILaunchSessionService launchSessionService,
         IToolPlatformService toolPlatformService,
         IOptions<LtiToolProviderOptions> toolProviderOptions)
     {
         _logger = logger;
-        _tokenValidator = tokenValidator;
         _launchSessionService = launchSessionService;
         _toolPlatformService = toolPlatformService;
         _toolProviderOptions = toolProviderOptions.Value;
@@ -80,12 +77,6 @@ public class LtiController : ControllerBase
         if (platform == null)
         {
             return NotFound($"Unable to find platform {toolPlatformReference.Id}");
-        }
-
-        var signatureResult = await _tokenValidator.ValidateSignature(platform, message);
-        if (signatureResult == null)
-        {
-            return BadRequest("Unable to verify identity token");
         }
 
         var session = await _launchSessionService.Get(callback.State);
