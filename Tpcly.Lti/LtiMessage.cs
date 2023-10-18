@@ -16,9 +16,9 @@ public class LtiMessage : JwtSecurityToken
 
     public string? DeploymentId => Claims.GetValue(LtiClaimType.DeploymentId);
 
-    public ResourceLink ResourceLink => Claims.GetValue<ResourceLink>(LtiClaimType.ResourceLink);
+    public ResourceLink? ResourceLink => Claims.GetValue<ResourceLink>(LtiClaimType.ResourceLink);
 
-    public Uri TargetLinkUri => new(Claims.GetValue(LtiClaimType.TargetLinkUri));
+    public Uri TargetLinkUri => new(Claims.GetValue(LtiClaimType.TargetLinkUri) ?? string.Empty);
 
     public LearningInformationServices? Lis => Claims.GetValue<LearningInformationServices>(LtiClaimType.LearningInformationServices);
 
