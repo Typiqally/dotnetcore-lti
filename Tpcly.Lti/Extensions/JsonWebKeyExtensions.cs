@@ -1,6 +1,5 @@
 using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
-using JsonWebKey = IdentityModel.Jwk.JsonWebKey;
 
 namespace Tpcly.Lti.Extensions;
 

@@ -1,5 +1,4 @@
-using IdentityModel;
-using IdentityModel.Client;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Tpcly.Lti;
 
@@ -14,23 +13,24 @@ public record LtiOpenIdConnectInitiation(
 {
     public string CreateAuthorizeUrl(Uri baseUrl, Uri redirectUri, string nonce, string? state = null)
     {
-        var additionalParameters = new Parameters(new[]
+        var openIdMessage = new OpenIdConnectMessage
         {
-            new KeyValuePair<string, string>("lti_message_hint", EncodedLtiMessageHint),
-        });
+            IssuerAddress = baseUrl.ToString(),
+            ClientId = ClientId,
+            ResponseType = OpenIdConnectResponseType.IdToken,
+            ResponseMode = OpenIdConnectResponseMode.FormPost,
+            Scope = OpenIdConnectScope.OpenId,
+            RedirectUri = redirectUri.ToString(),
+            State = state,
+            Nonce = nonce,
+            LoginHint = LoginHint,
+            Prompt = OpenIdConnectPrompt.None,
+            Parameters =
+            {
+                { "lti_message_hint", EncodedLtiMessageHint }
+            }
+        };
 
-        var requestUrl = new RequestUrl(baseUrl.ToString());
-        return requestUrl.CreateAuthorizeUrl(
-            clientId: ClientId,
-            responseType: OidcConstants.ResponseTypes.IdToken,
-            responseMode: OidcConstants.ResponseModes.FormPost,
-            scope: OidcConstants.StandardScopes.OpenId,
-            redirectUri: redirectUri.ToString(),
-            state: state,
-            nonce: nonce,
-            loginHint: LoginHint,
-            prompt: OidcConstants.PromptModes.None,
-            extra: additionalParameters
-        );
+        return openIdMessage.CreateAuthenticationRequestUrl();
     }
 }

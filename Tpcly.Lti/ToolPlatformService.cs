@@ -1,4 +1,4 @@
-using IdentityModel.Jwk;
+using Microsoft.IdentityModel.Tokens;
 using Tpcly.Persistence.Abstractions;
 
 namespace Tpcly.Lti;

@@ -1,4 +1,4 @@
-using IdentityModel.Jwk;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Tpcly.Lti;
 

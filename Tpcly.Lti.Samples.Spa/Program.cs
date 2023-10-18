@@ -1,9 +1,9 @@
 using IdentityModel.Client;
-using IdentityModel.Jwk;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Tpcly.Lti;
 using Tpcly.Lti.Samples.Spa;
 using Tpcly.Lti.Samples.Spa.Data;

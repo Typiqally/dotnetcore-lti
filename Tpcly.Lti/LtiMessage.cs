@@ -1,5 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
-using IdentityModel.Jwk;
+using Microsoft.IdentityModel.Tokens;
 using Tpcly.Lti.Extensions;
 
 namespace Tpcly.Lti;
