@@ -30,7 +30,7 @@ public class LtiMessage : JwtSecurityToken
 
     public IEnumerable<string>? Roles => Claims.GetValue<IEnumerable<string>>(LtiClaimType.Roles);
 
-    public IDictionary<string, string>? Custom => Claims.GetValue<IDictionary<string, string>?>(LtiClaimType.Custom);
+    public IDictionary<string, object>? Custom => Claims.GetValue<IDictionary<string, object>?>(LtiClaimType.Custom);
 
     public JsonWebKey GetSigningKey(JsonWebKeySet jwks) => jwks.Keys.Single(k => k.Kid == Header.Kid.Trim('"'));
 }
