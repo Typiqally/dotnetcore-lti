@@ -1,12 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
-using IdentityModel.Jwk;
+using Microsoft.IdentityModel.Tokens;
 using Tpcly.Lti.Extensions;
 
 namespace Tpcly.Lti;
 
-public class LtiRequest : JwtSecurityToken
+public class LtiMessage : JwtSecurityToken
 {
-    public LtiRequest(string idToken) : base(idToken)
+    public LtiMessage(string idToken) : base(idToken)
     {
     }
 
@@ -16,9 +16,9 @@ public class LtiRequest : JwtSecurityToken
 
     public string? DeploymentId => Claims.GetValue(LtiClaimType.DeploymentId);
 
-    public ResourceLink ResourceLink => Claims.GetValue<ResourceLink>(LtiClaimType.ResourceLink);
+    public ResourceLink? ResourceLink => Claims.GetValue<ResourceLink>(LtiClaimType.ResourceLink);
 
-    public Uri TargetLinkUri => new(Claims.GetValue(LtiClaimType.TargetLinkUri));
+    public Uri TargetLinkUri => new(Claims.GetValue(LtiClaimType.TargetLinkUri) ?? string.Empty);
 
     public LearningInformationServices? Lis => Claims.GetValue<LearningInformationServices>(LtiClaimType.LearningInformationServices);
 
@@ -30,7 +30,7 @@ public class LtiRequest : JwtSecurityToken
 
     public IEnumerable<string>? Roles => Claims.GetValue<IEnumerable<string>>(LtiClaimType.Roles);
 
-    public IDictionary<string, string>? Custom => Claims.GetValue<IDictionary<string, string>?>(LtiClaimType.Custom);
+    public IDictionary<string, object>? Custom => Claims.GetValue<IDictionary<string, object>?>(LtiClaimType.Custom);
 
     public JsonWebKey GetSigningKey(JsonWebKeySet jwks) => jwks.Keys.Single(k => k.Kid == Header.Kid.Trim('"'));
 }

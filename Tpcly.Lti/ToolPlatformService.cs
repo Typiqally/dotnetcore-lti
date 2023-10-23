@@ -1,4 +1,4 @@
-using IdentityModel.Jwk;
+using Microsoft.IdentityModel.Tokens;
 using Tpcly.Persistence.Abstractions;
 
 namespace Tpcly.Lti;
@@ -16,12 +16,18 @@ public class ToolPlatformService : IToolPlatformService
 
     public async Task<ToolPlatform?> GetById(string id)
     {
-        return  await _tenantRepository.SingleOrDefaultAsync(platform => platform.Id == id);
+        return await _tenantRepository.SingleOrDefaultAsync(platform => platform.Id == id);
     }
 
-    public async Task<JsonWebKeySet?> GetJwks(ToolPlatform tenant)
+    public async Task<JsonWebKeySet?> GetJwks(string id)
     {
-        var response = await _http.GetAsync(tenant.JwkSetUrl);
+        var toolPlatform = await _tenantRepository.SingleOrDefaultAsync(platform => platform.Id == id);
+        return toolPlatform != null ? await GetJwks(toolPlatform) : null;
+    }
+
+    public async Task<JsonWebKeySet?> GetJwks(ToolPlatform toolPlatform)
+    {
+        var response = await _http.GetAsync(toolPlatform.JwkSetUrl);
         return new JsonWebKeySet(await response.Content.ReadAsStringAsync());
     }
 }

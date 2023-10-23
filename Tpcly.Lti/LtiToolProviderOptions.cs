@@ -1,8 +1,8 @@
-using IdentityModel.Jwk;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Tpcly.Lti;
 
-public class LtiOptions
+public class LtiToolProviderOptions
 {
     public string RedirectUri { get; set; }
     

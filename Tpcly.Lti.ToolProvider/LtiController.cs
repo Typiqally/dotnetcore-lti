@@ -6,30 +6,27 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Tpcly.Lti.Canvas;
 
-namespace Tpcly.Lti.AspNetCore;
+namespace Tpcly.Lti.ToolProvider;
 
 [ApiController]
 [Route("/lti")]
 public class LtiController : ControllerBase
 {
     private readonly ILogger _logger;
-    private readonly ILtiTokenValidator _tokenValidator;
     private readonly ILaunchSessionService _launchSessionService;
     private readonly IToolPlatformService _toolPlatformService;
-    private readonly LtiOptions _ltiOptions;
+    private readonly LtiToolProviderOptions _toolProviderOptions;
 
     public LtiController(
         ILogger<LtiController> logger,
-        ILtiTokenValidator tokenValidator,
         ILaunchSessionService launchSessionService,
         IToolPlatformService toolPlatformService,
-        IOptions<LtiOptions> options)
+        IOptions<LtiToolProviderOptions> toolProviderOptions)
     {
         _logger = logger;
-        _tokenValidator = tokenValidator;
         _launchSessionService = launchSessionService;
         _toolPlatformService = toolPlatformService;
-        _ltiOptions = options.Value;
+        _toolProviderOptions = toolProviderOptions.Value;
     }
 
     [HttpPost("oidc/auth")]
@@ -50,7 +47,7 @@ public class LtiController : ControllerBase
         var (nonce, _) = await _launchSessionService.Start(state, initiationRequest);
         var authorizeRedirectUrl = initiationRequest.CreateAuthorizeUrl(
             authorizeUrl,
-            new Uri(hostUrl, _ltiOptions.RedirectUri),
+            new Uri(hostUrl, _toolProviderOptions.RedirectUri),
             nonce,
             state
         );
@@ -68,7 +65,7 @@ public class LtiController : ControllerBase
     [HttpPost("oidc/callback")]
     public async Task<IActionResult> ProcessOidcCallback([ModelBinder(typeof(LtiOpenIdCallbackLaunchModelBinder))] LtiOpenIdConnectCallback callback)
     {
-        var message = new LtiRequest(callback.IdToken);
+        var message = new LtiMessage(callback.IdToken);
 
         var toolPlatformReference = message.ToolPlatform;
         if (toolPlatformReference == null)
@@ -80,12 +77,6 @@ public class LtiController : ControllerBase
         if (platform == null)
         {
             return NotFound($"Unable to find platform {toolPlatformReference.Id}");
-        }
-
-        var signatureResult = await _tokenValidator.ValidateSignature(platform, message);
-        if (signatureResult == null)
-        {
-            return BadRequest("Unable to verify identity token");
         }
 
         var session = await _launchSessionService.Get(callback.State);

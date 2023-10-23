@@ -21,4 +21,12 @@ public class LtiBuilder
 
         return this;
     }
+
+    public LtiBuilder AddToolProvider(Action<LtiToolProviderOptions> options)
+    {
+        Services.Configure(options);
+        Services.AddScoped<ILaunchSessionService, LaunchSessionService>();
+
+        return this;
+    }
 }

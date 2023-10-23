@@ -12,20 +12,20 @@ namespace Tpcly.Lti;
 public class LaunchSessionService : ILaunchSessionService
 {
     private readonly ILogger<LaunchSessionService> _logger;
-    private readonly LtiOptions _options;
+    private readonly LtiToolProviderOptions _toolProviderOptions;
     private readonly IRepository<LaunchSession> _sessionRepository;
     private readonly IRepository<LaunchSessionCredentials> _sessionTokenRepository;
     private readonly JwtSecurityTokenHandler _jwtHandler;
 
     public LaunchSessionService(
         ILogger<LaunchSessionService> logger,
-        IOptions<LtiOptions> options,
+        IOptions<LtiToolProviderOptions> toolProviderOptions,
         IRepository<LaunchSession> sessionRepository,
         IRepository<LaunchSessionCredentials> sessionTokenRepository
     )
     {
         _logger = logger;
-        _options = options.Value;
+        _toolProviderOptions = toolProviderOptions.Value;
         _sessionRepository = sessionRepository;
         _sessionTokenRepository = sessionTokenRepository;
         _jwtHandler = new JwtSecurityTokenHandler();
@@ -63,7 +63,7 @@ public class LaunchSessionService : ILaunchSessionService
                 new Claim("state", session.Id)
             },
             expires: DateTime.UtcNow.AddSeconds(5),
-            signingCredentials: new SigningCredentials(_options.Jwk.ToRsaSecurityKey(), SecurityAlgorithms.RsaSha256)
+            signingCredentials: new SigningCredentials(_toolProviderOptions.Jwk.ToRsaSecurityKey(), SecurityAlgorithms.RsaSha256)
         );
 
         var jwt = _jwtHandler.WriteToken(token);
@@ -93,7 +93,7 @@ public class LaunchSessionService : ILaunchSessionService
         {
             ValidateAudience = false,
             ValidateIssuer = false,
-            IssuerSigningKey = _options.Jwk.ToRsaSecurityKey(),
+            IssuerSigningKey = _toolProviderOptions.Jwk.ToRsaSecurityKey(),
         };
 
         var claimsPrincipal = _jwtHandler.ValidateToken(token, validationParameters, out var validatedToken);

@@ -1,9 +1,9 @@
 using IdentityModel.Client;
-using IdentityModel.Jwk;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Tpcly.Lti;
 using Tpcly.Lti.Samples.Spa;
 using Tpcly.Lti.Samples.Spa.Data;
@@ -32,8 +32,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     );
 });
 
-builder.Services.AddCors(options => { options.AddDefaultPolicy(policy => { policy.WithOrigins(config["Lti:TargetUri"]).AllowAnyMethod().AllowAnyHeader().AllowCredentials(); }); });
-builder.Services.AddLti(options =>
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy => { policy.WithOrigins(config["Lti:TargetUri"]).AllowAnyMethod().AllowAnyHeader().AllowCredentials(); });
+});
+
+builder.Services.AddLti()
+    .AddToolProvider(options =>
     {
         options.RedirectUri = "/lti/oidc/callback";
         options.Jwk = new JsonWebKey(config["Lti:Jwk"]);

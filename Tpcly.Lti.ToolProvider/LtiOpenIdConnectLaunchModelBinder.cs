@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Tpcly.Lti.AspNetCore;
+namespace Tpcly.Lti.ToolProvider;
 
 public class LtiOpenIdConnectLaunchModelBinder : IModelBinder
 {

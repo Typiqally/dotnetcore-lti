@@ -4,8 +4,8 @@ namespace Tpcly.Lti.DeepLinking;
 
 public static class DeepLinkingLtiRequestExtensions
 {
-    public static DeepLinkingSettings? DeepLinkingSettings(this LtiRequest request)
+    public static DeepLinkingSettings? DeepLinkingSettings(this LtiMessage message)
     {
-        return request.Claims.GetValue<DeepLinkingSettings>(LtiDeepLinkingClaimType.DeepLinkingSettings);
+        return message.Claims.GetValue<DeepLinkingSettings>(LtiDeepLinkingClaimType.DeepLinkingSettings);
     }
 }

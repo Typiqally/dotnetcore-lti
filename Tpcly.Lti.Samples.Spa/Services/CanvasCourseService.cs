@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using Tpcly.Lti.Samples.Spa.Data.Models;
 
 namespace Tpcly.Lti.Samples.Spa.Services;
