@@ -4,7 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PackageVersion>1.0.0-alpha.2</PackageVersion>
+        <PackageVersion>1.0.0-alpha.3</PackageVersion>
         <Authors>Typiqally</Authors>
         <PackageProjectUrl>https://github.com/Typiqally/dotnetcore-lti</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Typiqally/dotnetcore-lti</RepositoryUrl>
