@@ -18,6 +18,19 @@ public static class ClaimExtensions
     public static T? GetValue<T>(this IEnumerable<Claim> claims, string type, JsonSerializerOptions? options = null)
     {
         var value = claims.GetValue(type);
-        return value == null ? default : JsonSerializer.Deserialize<T>(value, options);
+        return value == null
+            ? default
+            : JsonSerializer.Deserialize<T>(value, options);
+    }
+
+    public static IEnumerable<string> GetValues(this IEnumerable<Claim> claims, string type)
+    {
+        return claims.Where(c => c.Type == type).Select(static c => c.Value);
+    }
+
+    public static IEnumerable<T?> GetValues<T>(this IEnumerable<Claim> claims, string type, JsonSerializerOptions? options = null)
+    {
+        var values = claims.GetValues(type);
+        return values.Select(v => JsonSerializer.Deserialize<T>(v, options));
     }
 }
