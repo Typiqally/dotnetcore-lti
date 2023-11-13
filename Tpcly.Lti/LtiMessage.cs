@@ -28,7 +28,7 @@ public class LtiMessage : JwtSecurityToken
 
     public LaunchPresentation? LaunchPresentation => Claims.GetValue<LaunchPresentation>(LtiClaimType.LaunchPresentation);
 
-    public IEnumerable<string>? Roles => Claims.GetValue<IEnumerable<string>>(LtiClaimType.Roles);
+    public IEnumerable<string>? Roles => Claims.GetValues(LtiClaimType.Roles);
 
     public IDictionary<string, object>? Custom => Claims.GetValue<IDictionary<string, object>?>(LtiClaimType.Custom);
 

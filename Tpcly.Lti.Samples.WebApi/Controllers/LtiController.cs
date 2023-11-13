@@ -17,7 +17,8 @@ public class LtiController : ControllerBase
             { "lti_version", ltiMessage.Version },
             { "tool", ltiMessage.ToolPlatform },
             { "user_id", ltiMessage.Custom["user_id"] },
-            { "course_id", ltiMessage.Custom["course_id"] }
+            { "course_id", ltiMessage.Custom["course_id"] },
+            { "roles" , ltiMessage.Roles },
         };
 
         return Ok(info);
