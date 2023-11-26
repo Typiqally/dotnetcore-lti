@@ -1,6 +1,21 @@
 # .NET Core LTI
 LTI Tool Provider framework, built with ❤️ and ASP.NET Core
 
+## Built with
+
+## Features and roadmap
+- LTI tool provider controller, for handling LTI launches
+- LTI ID token validator, compatible with [ISecurityTokenValidator](https://learn.microsoft.com/en-us/dotnet/api/microsoft.identitymodel.tokens.isecuritytokenvalidator?view=msal-web-dotnet-latest) from Microsoft Identity Model
+- Tool platform storage
+
+## Getting started
+
+### Prerequisites
+
+### Installation
+
+## Usage
+
 ## Contributors
 
 <a href = "https://github.com/Typiqally/dotnetcore-lti/graphs/contributors">
