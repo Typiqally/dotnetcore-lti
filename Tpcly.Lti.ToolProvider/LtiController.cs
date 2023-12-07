@@ -90,29 +90,15 @@ public class LtiController : ControllerBase
         {
             return BadRequest("Nonce mismatch");
         }
-
-        var (token, _) = await _launchSessionService.StoreCredentials(session, callback.IdToken);
-
-        var builder = new UriBuilder(message.TargetLinkUri.ToString())
+        
+        var uriBuilder = new UriBuilder(message.TargetLinkUri.ToString())
         {
-            Query = $"token={token}",
+            Query = $"token={callback.IdToken}",
         };
 
-        var redirectUri = builder.ToString();
+        var redirectUri = uriBuilder.ToString();
 
         _logger.LogDebug("Redirecting callback to {RedirectUri}", redirectUri);
         return Redirect(redirectUri);
-    }
-
-    [HttpPost("exchange")]
-    public async Task<IActionResult> ExchangeToken([FromBody] LaunchSessionExchangeRequest exchangeRequest)
-    {
-        var credentials = await _launchSessionService.ExchangeToken(exchangeRequest.Token);
-        if (credentials == null)
-        {
-            return BadRequest("Invalid token");
-        }
-        
-        return Ok(credentials);
     }
 }
