@@ -1,5 +1,3 @@
-using Microsoft.IdentityModel.Tokens;
-
 namespace Tpcly.Lti;
 
 public interface ILaunchSessionService
